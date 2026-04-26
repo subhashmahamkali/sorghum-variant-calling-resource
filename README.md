@@ -71,10 +71,23 @@ The audit was read-only. Original project files were not modified.
 ## Repository Layout
 
 - `docs/`: workflow notes and audit interpretation
+- `workflows/`: R Markdown workflow skeletons for CRAM/FASTQ processing and variant calling
 - `metadata/`: copied manifests and sample lists
+- `metadata/curated/`: cleaned canonical sample lists and sample-source tables
 - `inventories/`: path inventories for large files and directories
 - `scripts/`: copied pipeline scripts, preserving source context
 - `reports/`: selected lightweight QC reports and summaries
 - `references/`: reference and known-sites path documentation
 - `logs_index/`: log-file inventories, not full logs unless small and useful
 - `project_tree/`: directory layout representation of the original project
+
+## Curated Metadata
+
+Use these files first when checking sample identity:
+
+- `metadata/curated/bqsr_876_samples.txt`: canonical 876 WGS/BQSR samples
+- `metadata/curated/expvp_46_samples.txt`: 46 EX-pvp/Wild samples
+- `metadata/curated/final_922_samples.txt`: combined final joint-call sample list
+- `metadata/curated/haplotypecaller_971_sample_sources.tsv`: HaplotypeCaller sample/source table
+
+See `docs/metadata_guide.md` for how these counts relate to each other.

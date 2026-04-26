@@ -1,0 +1,121 @@
+---
+title: "sorghum_variant_calling"
+author: "subhash"
+date: "2025-10-15"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir=normalizePath('..//..//'))
+```
+
+# 1. Convert CRAM to FASTQ
+
+Driver script to run CRAM to FASTQ conversion:
+
+```{bash, eval=FALSE}
+set -euo pipefail
+
+WORK=/mnt/nrdstor/jyanglab/subhash/sorghum_WGS_JS
+SCRIPT=$WORK/sorghum_cram_to_fastq.sh
+FASTQ_ROOT=/work/jyanglab/subhash/1.fastq
+LOG_DIR=/work/jyanglab/subhash/logs
+LIST=$FASTQ_ROOT/piscbt_crams.list
+
+mkdir -p "$FASTQ_ROOT" "$LOG_DIR"
+
+find "$WORK" -maxdepth 3 -type f -name '*.cram' \
+    | grep -E '/(PI|SC|unknown|BT)[^/]*/[^/]+\.cram$' \
+    | grep -v '_unmatched\.cram$' \
+    | sort > "$LIST"
+
+while read -r CRAM; do
+    SAMPLE=$(basename "${CRAM%.cram}")
+    sbatch --export=CRAM="$CRAM",SAMPLE="$SAMPLE" "$SCRIPT"
+done < "$LIST"
+```
+
+Conversion script:
+
+```{bash, eval=FALSE}
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=8
+#SBATCH --mem=16G
+#SBATCH --time=24:00:00
+#SBATCH --partition=jclarke,batch,guest
+#SBATCH --job-name=cram2fq
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=smahamkalivenkatas2@huskers.unl.edu
+#SBATCH --output=/work/jyanglab/subhash/logs/%x_%j.out
+#SBATCH --error=/work/jyanglab/subhash/logs/%x_%j.err
+
+module load samtools pigz 2>/dev/null || module load samtools
+
+REF=/work/jyanglab/subhash/refs/hg38
+WORK=/mnt/nrdstor/jyanglab/subhash/sorghum_WGS_JS
+FASTQ_ROOT=/work/jyanglab/subhash/1.fastq
+LOG_DIR=/work/jyanglab/subhash/logs
+CRAM=${CRAM:?Set CRAM path via sbatch --export}
+SAMPLE=${SAMPLE:-$(basename "${CRAM%.cram}")}
+FASTQ_DIR="$FASTQ_ROOT/$SAMPLE"
+
+mkdir -p "$FASTQ_DIR" "$LOG_DIR"
+
+samtools view -@ 8 -T "$REF/hg38.fa" -b "$CRAM" \
+    | samtools fastq -@ 8 - \
+        -1 "$FASTQ_DIR/${SAMPLE}_R1.fq" \
+        -2 "$FASTQ_DIR/${SAMPLE}_R2.fq" \
+        -0 "$FASTQ_DIR/${SAMPLE}_unpaired.fq" \
+        -s "$FASTQ_DIR/${SAMPLE}_single.fq" \
+        -n
+
+for fq in \
+    "$FASTQ_DIR/${SAMPLE}_R1.fq" \
+    "$FASTQ_DIR/${SAMPLE}_R2.fq" \
+    "$FASTQ_DIR/${SAMPLE}_unpaired.fq" \
+    "$FASTQ_DIR/${SAMPLE}_single.fq"; do
+  [[ -f "$fq" ]] || : > "$fq"
+  pigz -p 8 "$fq" || gzip "$fq"
+done
+```
+
+# 2. Trim Low-Quality Reads and Adapters with fastp
+
+The repository preserves the exact fastp scripts under:
+
+- `scripts/work/jyanglab/subhash/NEW/1.fastq/fastp_unpaired_array.sh`
+- `scripts/work/jyanglab/subhash/NEW/1.fastq/prepare_fastp_unpaired_array.sh`
+- `scripts/work/jyanglab/subhash/NEW/1.fastq/run_fastp_unpaired.sh`
+
+The key sample list is:
+
+- `metadata/work/jyanglab/subhash/NEW/1.fastq/trim/unpaired_fastq.list`
+
+# 3. Align to Reference Genome with bwa-mem2
+
+Main script:
+
+- `scripts/work/jyanglab/subhash/NEW/scripts/alignment_unpaired_array.sh`
+
+Important settings:
+
+- Reference FASTA:
+  `/work/jyanglab/subhash/variant_calling/0.test/1.Raw_reads/4.refrence/Phytozome/PhytozomeV13/Sbicolor/v5.1/assembly/Sorghum_bicolorv5.Sb-BTX623-REFERENCE-JGI-5.1.dna.toplevel.fa`
+- Modules: `bwa-mem2`, `samtools`
+- Mapping filter: `samtools view -q 30 -F 4`
+- Output pattern: `/work/jyanglab/subhash/NEW/2.alignment/<sample>/<sample>.srt.bam`
+
+# 4. Picard MarkDuplicates
+
+Main script:
+
+- `scripts/work/jyanglab/subhash/NEW/scripts/picard_markduplicates_array.sh`
+
+Important settings:
+
+- Module: `picard/3.0`
+- Duplicate handling: `REMOVE_DUPLICATES=true`
+- Output pattern:
+  `/work/jyanglab/subhash/NEW/picard/<sample>/<sample>_picard_dedup.bam`
