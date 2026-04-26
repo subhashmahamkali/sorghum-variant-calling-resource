@@ -1,7 +1,0 @@
-sample1	PI576404_1
-sample2	PI576404_2
-total_sites	33498194
-non_missing_sites	22523158
-missing_sites	10975036
-same_genotypes	20409215	0.906144
-different_genotypes	2113943	0.093856

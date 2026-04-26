@@ -1,0 +1,49 @@
+---
+title: "09 Filter SNPs"
+author: "subhash"
+date: "2025-10-15"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Purpose
+
+Select SNPs from the raw VCF and apply hard filters.
+
+# Inputs
+
+- Raw VCF:
+  `/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/RAW_vcf/RAW_SAP_BQSR.vcf.gz`
+
+# Outputs
+
+- Final filtered SNP VCF:
+  `/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/final_vcf/results/SAP_BQSR_filtered_snps.vcf.gz`
+
+# Filters
+
+Site filter:
+
+```{bash, eval=FALSE}
+MQ < 20.0 || QD < 2.0 || FS > 60.0 || MQRankSum < -12.5 || ReadPosRankSum < -8.0 || QUAL < 30.0
+```
+
+Genotype filter:
+
+```{bash, eval=FALSE}
+DP < 3
+```
+
+# Script
+
+- `scripts/09_filter_snps/filter_snps.sbatch`
+
+# Run
+
+```{bash, eval=FALSE}
+cd /work/jyanglab/subhash/6.genomicsdb_5mb
+sbatch genotype_vcfs/final_vcf/scripts/filter_snps.sbatch
+```

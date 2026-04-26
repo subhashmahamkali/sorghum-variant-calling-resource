@@ -1,0 +1,35 @@
+---
+title: "08 Gather Raw VCF"
+author: "subhash"
+date: "2025-10-15"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Purpose
+
+Gather interval VCFs into one raw joint-called VCF.
+
+# Inputs
+
+- Ordered VCF list:
+  `/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/scripts/vcf_list_manifest_order.txt`
+
+# Outputs
+
+- Raw VCF:
+  `/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/RAW_vcf/RAW_SAP_BQSR.vcf.gz`
+
+# Script
+
+- `scripts/08_gather_raw_vcf/gather_raw_vcf.sbatch`
+
+# Run
+
+```{bash, eval=FALSE}
+cd /work/jyanglab/subhash/6.genomicsdb_5mb
+sbatch genotype_vcfs/scripts/gather_raw_vcf.sbatch
+```

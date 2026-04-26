@@ -1,0 +1,37 @@
+---
+title: "07 GenotypeGVCFs"
+author: "subhash"
+date: "2025-10-15"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Purpose
+
+Run GATK `GenotypeGVCFs` on each GenomicsDB workspace to produce interval VCFs.
+
+# Inputs
+
+- Manifest:
+  `/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/scripts/genotype_5mb_manifest.tsv`
+- Reference FASTA:
+  `/work/jyanglab/subhash/variant_calling/2.refrence/Phytozome/PhytozomeV13/Sbicolor/v5.1/assembly/sorghum_v5.1.fa`
+
+# Outputs
+
+- Interval VCFs under:
+  `/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/vcfs/`
+
+# Script
+
+- `scripts/07_genotype_gvcfs/genotype_from_gdb_array.sbatch`
+
+# Run
+
+```{bash, eval=FALSE}
+cd /work/jyanglab/subhash/6.genomicsdb_5mb
+sbatch --array=1-149 genotype_vcfs/scripts/genotype_from_gdb_array.sbatch
+```

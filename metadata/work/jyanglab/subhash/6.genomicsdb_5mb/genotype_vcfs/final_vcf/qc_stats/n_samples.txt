@@ -1,1 +1,0 @@
-922 /work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/final_vcf/qc_stats/samples.list

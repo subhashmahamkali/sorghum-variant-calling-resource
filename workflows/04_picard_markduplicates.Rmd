@@ -1,0 +1,35 @@
+---
+title: "04 Picard MarkDuplicates"
+author: "subhash"
+date: "2025-10-15"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Purpose
+
+Remove duplicate reads from sorted BAM files using Picard `MarkDuplicates`.
+
+# Inputs
+
+- Sorted BAMs: `/work/jyanglab/subhash/NEW/2.alignment/<sample>/<sample>.srt.bam`
+- Sample list: `/work/jyanglab/subhash/NEW/2.alignment/alignment_samples.list`
+
+# Outputs
+
+- Deduplicated BAMs: `/work/jyanglab/subhash/NEW/picard/<sample>/<sample>_picard_dedup.bam`
+- Picard metrics: `/work/jyanglab/subhash/NEW/picard/<sample>/<sample>_picard_metrics.txt`
+
+# Script
+
+- `scripts/04_picard_markduplicates/picard_markduplicates_array.sh`
+
+# Run
+
+```{bash, eval=FALSE}
+cd /work/jyanglab/subhash/NEW
+sbatch --array=1-571%24 scripts/picard_markduplicates_array.sh
+```

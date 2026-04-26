@@ -1,0 +1,37 @@
+---
+title: "06 GenomicsDBImport"
+author: "subhash"
+date: "2025-10-15"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Purpose
+
+Import gVCFs into GATK GenomicsDB workspaces by 5 Mb intervals.
+
+# Inputs
+
+- Sample map:
+  `/work/jyanglab/subhash/6.genomicsdb_5mb/sample_maps/gdb_sample_map_922.tsv`
+- Intervals:
+  `/work/jyanglab/subhash/6.genomicsdb_5mb/intervals/intervals_5mb.list`
+
+# Outputs
+
+- GenomicsDB workspaces:
+  `/work/jyanglab/subhash/6.genomicsdb_5mb/workspaces/`
+
+# Script
+
+- `scripts/06_genomicsdb_import/genomicsdb_import_array_922.sbatch`
+
+# Run
+
+```{bash, eval=FALSE}
+cd /work/jyanglab/subhash/6.genomicsdb_5mb
+sbatch --array=1-149 scripts/genomicsdb_import_array_922.sbatch
+```

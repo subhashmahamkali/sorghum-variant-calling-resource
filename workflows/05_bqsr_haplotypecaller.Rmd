@@ -1,0 +1,40 @@
+---
+title: "05 BQSR and HaplotypeCaller"
+author: "subhash"
+date: "2025-10-15"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Purpose
+
+Run GATK `BaseRecalibrator`, `ApplyBQSR`, and `HaplotypeCaller` to produce
+per-sample gVCFs.
+
+# Inputs
+
+- Manifest: `/work/jyanglab/subhash/BQSR/samples.tsv`
+- Reference FASTA:
+  `/work/jyanglab/subhash/variant_calling/2.refrence/Phytozome/PhytozomeV13/Sbicolor/v5.1/assembly/sorghum_v5.1.fa`
+- Known sites:
+  `/work/jyanglab/subhash/known_sites/known_sites_merged.num.renamed.vcf.gz`
+
+# Outputs
+
+- BQSR tables: `/work/jyanglab/subhash/BQSR/tables/`
+- BQSR BAMs: `/work/jyanglab/subhash/BQSR/bam/`
+- gVCFs: `/work/jyanglab/subhash/BQSR/gvcf/`
+
+# Script
+
+- `scripts/05_bqsr_haplotypecaller/BQSR_array.sh`
+
+# Run
+
+```{bash, eval=FALSE}
+cd /work/jyanglab/subhash/BQSR
+sbatch --array=1-876 BQSR_array.sh
+```

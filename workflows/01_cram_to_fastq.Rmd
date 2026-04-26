@@ -1,0 +1,38 @@
+---
+title: "01 CRAM to FASTQ"
+author: "subhash"
+date: "2025-10-15"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Purpose
+
+Convert input CRAM files to FASTQ files and prepare the CRAM sample list.
+
+# Inputs
+
+- CRAM storage root: `/mnt/nrdstor/jyanglab/subhash/sorghum_WGS_JS`
+- CRAM list output: `/work/jyanglab/subhash/NEW/1.fastq/piscbt_crams.list`
+
+# Outputs
+
+- FASTQ files under `/work/jyanglab/subhash/NEW/1.fastq/<sample>/`
+- Slurm logs under `/work/jyanglab/subhash/NEW/1.fastq/logs/`
+
+# Scripts
+
+- `scripts/01_cram_to_fastq/01_prepare_cram_list_and_submit.sh`
+- `scripts/01_cram_to_fastq/02_cram_to_fastq_array.sh`
+
+# Run
+
+```{bash, eval=FALSE}
+bash scripts/01_cram_to_fastq/01_prepare_cram_list_and_submit.sh
+```
+
+Set `CRAM_REF_FASTA` if the CRAM files require a different reference FASTA for
+decoding.

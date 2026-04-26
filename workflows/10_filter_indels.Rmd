@@ -1,0 +1,49 @@
+---
+title: "10 Filter INDELs"
+author: "subhash"
+date: "2025-10-15"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Purpose
+
+Select INDEL and mixed records from the raw VCF and apply hard filters.
+
+# Inputs
+
+- Raw VCF:
+  `/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/RAW_vcf/RAW_SAP_BQSR.vcf.gz`
+
+# Outputs
+
+- Final filtered INDEL VCF:
+  `/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/final_vcf/results/SAP_BQSR_filtered_indels.vcf.gz`
+
+# Filters
+
+Site filter:
+
+```{bash, eval=FALSE}
+QD < 2.0 || FS > 200.0 || ReadPosRankSum < -20.0 || SOR > 10.0 || QUAL < 30.0
+```
+
+Genotype filter:
+
+```{bash, eval=FALSE}
+DP < 3
+```
+
+# Script
+
+- `scripts/10_filter_indels/filter_indels.sbatch`
+
+# Run
+
+```{bash, eval=FALSE}
+cd /work/jyanglab/subhash/6.genomicsdb_5mb
+sbatch genotype_vcfs/final_vcf/scripts/filter_indels.sbatch
+```

@@ -1,0 +1,39 @@
+---
+title: "02 fastp Trim"
+author: "subhash"
+date: "2025-10-15"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Purpose
+
+Trim adapters and low-quality bases from unpaired FASTQ files using `fastp`.
+
+# Inputs
+
+- FASTQ root: `/work/jyanglab/subhash/NEW/1.fastq`
+- Input pattern: `*_unpaired.fq.gz`
+
+# Outputs
+
+- Trimmed FASTQs: `/work/jyanglab/subhash/NEW/1.fastq/trim/*_fastp.fq.gz`
+- Reports: `/work/jyanglab/subhash/NEW/1.fastq/trim/reports/`
+- Sample list: `/work/jyanglab/subhash/NEW/1.fastq/trim/unpaired_fastq.list`
+
+# Scripts
+
+- `scripts/02_fastp_trim/prepare_fastp_unpaired_array.sh`
+- `scripts/02_fastp_trim/fastp_unpaired_array.sh`
+- `scripts/02_fastp_trim/run_fastp_unpaired.sh`
+
+# Run
+
+```{bash, eval=FALSE}
+cd /work/jyanglab/subhash/NEW/1.fastq
+bash prepare_fastp_unpaired_array.sh
+sbatch --array=1-571%16 fastp_unpaired_array.sh
+```

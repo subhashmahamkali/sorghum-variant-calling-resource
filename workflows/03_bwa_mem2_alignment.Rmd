@@ -1,0 +1,39 @@
+---
+title: "03 bwa-mem2 Alignment"
+author: "subhash"
+date: "2025-10-15"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Purpose
+
+Align trimmed FASTQ reads to the sorghum reference genome using `bwa-mem2`, then
+sort and index BAM files with `samtools`.
+
+# Inputs
+
+- Trimmed FASTQs: `/work/jyanglab/subhash/NEW/1.fastq/trim/*_fastp.fq.gz`
+- Sample list: `/work/jyanglab/subhash/NEW/2.alignment/alignment_samples.list`
+
+# Outputs
+
+- Sorted BAMs: `/work/jyanglab/subhash/NEW/2.alignment/<sample>/<sample>.srt.bam`
+- BAM indexes and flagstat files in each sample output directory
+
+# Scripts
+
+- `scripts/03_bwa_mem2_alignment/prepare_alignment_array.sh`
+- `scripts/03_bwa_mem2_alignment/submit_alignment_after_fastp.sh`
+- `scripts/03_bwa_mem2_alignment/alignment_unpaired_array.sh`
+
+# Run
+
+```{bash, eval=FALSE}
+cd /work/jyanglab/subhash/NEW
+bash scripts/prepare_alignment_array.sh
+sbatch --array=1-571%24 scripts/alignment_unpaired_array.sh
+```
