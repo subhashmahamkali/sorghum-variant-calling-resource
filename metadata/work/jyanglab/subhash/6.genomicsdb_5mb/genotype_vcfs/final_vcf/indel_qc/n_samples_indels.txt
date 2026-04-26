@@ -1,0 +1,1 @@
+922 /work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/final_vcf/indel_qc/samples_indels.list

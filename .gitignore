@@ -1,0 +1,41 @@
+# Large sequencing and variant files
+*.cram
+*.crai
+*.fastq
+*.fastq.gz
+*.fq
+*.fq.gz
+*.bam
+*.bai
+*.sam
+*.g.vcf
+*.g.vcf.gz
+*.vcf
+*.vcf.gz
+*.bcf
+*.tbi
+*.csi
+
+# Reference indexes and databases
+*.fa
+*.fasta
+*.fai
+*.dict
+*.amb
+*.ann
+*.bwt*
+*.pac
+*.0123
+
+# Runtime and temporary files
+*.tmp
+*.temp
+*.log
+slurm-*.out
+core.*
+
+# Python/R local noise
+__pycache__/
+.Rhistory
+.RData
+.Rproj.user/

@@ -1,0 +1,7 @@
+sample1	PI576416
+sample2	PI576416_1
+total_sites	33498194
+non_missing_sites	24246414
+missing_sites	9251780
+same_genotypes	22239569	0.917231
+different_genotypes	2006845	0.082769
