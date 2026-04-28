@@ -1,0 +1,6 @@
+step	job_name	job_id	dependency	script	repo_path	expected_output
+06	genomicsdb_import	14996681	none	scripts/06_genomicsdb_import/genomicsdb_import_array_922.sbatch	/home/jyanglab/subhash/sorghum-variant-calling-resource	/work/jyanglab/subhash/6.genomicsdb_5mb/workspaces/{interval_label}/
+07	genotype_gvcfs	14996682	afterok:14996681	scripts/07_genotype_gvcfs/genotype_from_gdb_array.sbatch	/home/jyanglab/subhash/sorghum-variant-calling-resource	/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/vcfs/{interval_label}.vcf.gz
+08	gather_raw_vcf	14996683	afterok:14996682	scripts/08_gather_raw_vcf/gather_raw_vcf.sbatch	/home/jyanglab/subhash/sorghum-variant-calling-resource	/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/RAW_vcf/RAW_SAP_BQSR.vcf.gz
+09	filter_snps	14996684	afterok:14996683	scripts/09_filter_snps/filter_snps.sbatch	/home/jyanglab/subhash/sorghum-variant-calling-resource	/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/final_vcf/results/SAP_BQSR_filtered_snps.vcf.gz
+10	filter_indels	14996685	afterok:14996683	scripts/10_filter_indels/filter_indels.sbatch	/home/jyanglab/subhash/sorghum-variant-calling-resource	/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/final_vcf/results/SAP_BQSR_filtered_indels.vcf.gz

@@ -1,0 +1,16 @@
+metric	value	notes
+hcc_repo_path	/home/jyanglab/subhash/sorghum-variant-calling-resource	Actual HCC checkout path used for submission.
+sample_list_rows	922	Rows in final_922 sample list used for directory preparation.
+fastq_sample_dirs	922	Created under /work/jyanglab/subhash/NEW/1.fastq.
+alignment_sample_dirs	922	Created under /work/jyanglab/subhash/NEW/2.alignment.
+picard_sample_dirs	922	Created under /work/jyanglab/subhash/NEW/picard.
+bqsr_samples_tsv_rows	876	Rows in /work/jyanglab/subhash/BQSR/samples.tsv.
+gdb_sample_map_rows	922	Rows in /work/jyanglab/subhash/6.genomicsdb_5mb/sample_maps/gdb_sample_map_922.tsv.
+intervals_5mb_rows	149	Rows in intervals_5mb.list.
+genotype_manifest_rows	149	Rows in genotype_5mb_manifest.tsv.
+vcf_list_manifest_rows	149	Rows in vcf_list_manifest_order.txt.
+bqsr_manifest_existing_bams	280	Manifest BAM path exists.
+bqsr_manifest_missing_bams	596	Manifest BAM path missing; affects Step 05 completeness.
+gdb_sample_map_existing_gvcfs	922	All sample-map gVCFs found.
+gdb_sample_map_missing_gvcfs	0	No missing gVCFs in sample map.
+raw_joint_vcf_status	PENDING	Will be produced by Step 08.

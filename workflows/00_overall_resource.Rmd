@@ -1,0 +1,163 @@
+---
+title: "00 Overall Variant-Calling Resource"
+author: "subhash"
+date: "2026-04-28"
+output: html_document
+params:
+  repo_root: "/home/jyanglab/subhash/sorghum-variant-calling-resource"
+  pf_csv: "/Users/subhashmahamkali/Downloads/pf_barcode_reads_summary_v2.csv"
+  book1_xlsx: "/Users/subhashmahamkali/Documents/variant_calling/Book1.xlsx"
+  hcc_new_root: "/work/jyanglab/subhash/NEW"
+  hcc_bqsr_root: "/work/jyanglab/subhash/BQSR"
+  hcc_gdb_root: "/work/jyanglab/subhash/6.genomicsdb_5mb"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+
+repo_root <- normalizePath(params$repo_root, mustWork = FALSE)
+
+read_id_list <- function(path) {
+  if (!file.exists(path)) return(character())
+  x <- trimws(readLines(path, warn = FALSE))
+  unique(x[nzchar(x)])
+}
+
+safe_count <- function(x) length(unique(x))
+```
+
+# Purpose
+
+This document provides a single, reproducible summary of the full sorghum
+variant-calling resource, including:
+
+- sample accounting transitions
+- step-wise pipeline organization
+- input/output path provenance
+- manuscript-ready run order
+- current HCC execution snapshot
+
+# Source Files (Cited)
+
+```{r source-files}
+source_files <- data.frame(
+  category = c(
+    "Raw NEW run summary",
+    "Curated transition workbook",
+    "Final 922 list",
+    "Core 876 list",
+    "ExPVP 46 list",
+    "Transition audit workbook",
+    "Included IDs workbook",
+    "Removed IDs workbook",
+    "HCC manifest path registry",
+    "HCC job-chain snapshot"
+  ),
+  path = c(
+    params$pf_csv,
+    params$book1_xlsx,
+    file.path(repo_root, "metadata/curated/final_922_samples.txt"),
+    file.path(repo_root, "metadata/curated/bqsr_876_samples.txt"),
+    file.path(repo_root, "metadata/curated/expvp_46_samples.txt"),
+    file.path(repo_root, "metadata/curated/sample_transition_audit.xlsx"),
+    file.path(repo_root, "metadata/curated/sample_ids_included.xlsx"),
+    file.path(repo_root, "metadata/curated/sample_ids_removed.xlsx"),
+    file.path(repo_root, "metadata/locations/hcc_manifest_paths.tsv"),
+    file.path(repo_root, "metadata/run_tracking/2026-04-28_slurm_submission_chain_steps06_10.tsv")
+  ),
+  stringsAsFactors = FALSE
+)
+source_files
+```
+
+# Reproducible Sample Accounting
+
+## Repo-curated counts
+
+```{r repo-counts}
+final_922 <- read_id_list(file.path(repo_root, "metadata/curated/final_922_samples.txt"))
+bqsr_876 <- read_id_list(file.path(repo_root, "metadata/curated/bqsr_876_samples.txt"))
+expvp_46 <- read_id_list(file.path(repo_root, "metadata/curated/expvp_46_samples.txt"))
+
+repo_counts <- data.frame(
+  metric = c("final_922", "bqsr_876", "expvp_46", "bqsr_plus_expvp"),
+  value = c(safe_count(final_922), safe_count(bqsr_876), safe_count(expvp_46), safe_count(union(bqsr_876, expvp_46))),
+  stringsAsFactors = FALSE
+)
+repo_counts
+```
+
+# Pipeline Steps and Artifacts
+
+```{r pipeline-table}
+pipeline_table <- data.frame(
+  step = sprintf("%02d", 1:10),
+  name = c(
+    "CRAM to FASTQ",
+    "fastp trimming",
+    "bwa-mem2 alignment",
+    "Picard MarkDuplicates",
+    "BQSR + HaplotypeCaller",
+    "GenomicsDBImport",
+    "GenotypeGVCFs",
+    "Gather raw VCF",
+    "Filter SNPs",
+    "Filter indels"
+  ),
+  script = c(
+    "scripts/01_cram_to_fastq/01_prepare_cram_list_and_submit.sh",
+    "scripts/02_fastp_trim/fastp_unpaired_array.sh",
+    "scripts/03_bwa_mem2_alignment/alignment_unpaired_array.sh",
+    "scripts/04_picard_markduplicates/picard_markduplicates_array.sh",
+    "scripts/05_bqsr_haplotypecaller/BQSR_array.sh",
+    "scripts/06_genomicsdb_import/genomicsdb_import_array_922.sbatch",
+    "scripts/07_genotype_gvcfs/genotype_from_gdb_array.sbatch",
+    "scripts/08_gather_raw_vcf/gather_raw_vcf.sbatch",
+    "scripts/09_filter_snps/filter_snps.sbatch",
+    "scripts/10_filter_indels/filter_indels.sbatch"
+  ),
+  wrapper = c(
+    "scripts/manuscript_resource/03_step01_cram_to_fastq_submit.sh",
+    "scripts/manuscript_resource/04_step02_fastp_submit.sh",
+    "scripts/manuscript_resource/05_step03_alignment_submit.sh",
+    "scripts/manuscript_resource/06_step04_picard_submit.sh",
+    "scripts/manuscript_resource/07_step05_bqsr_haplotypecaller_submit.sh",
+    "scripts/manuscript_resource/08_step06_genomicsdb_import_submit.sh",
+    "scripts/manuscript_resource/09_step07_genotype_gvcfs_submit.sh",
+    "scripts/manuscript_resource/10_step08_gather_raw_vcf_submit.sh",
+    "scripts/manuscript_resource/11_step09_filter_snps_submit.sh",
+    "scripts/manuscript_resource/12_step10_filter_indels_submit.sh"
+  ),
+  stringsAsFactors = FALSE
+)
+pipeline_table
+```
+
+# HCC Submission Snapshot (Steps 06-10)
+
+```{r hcc-submission-snapshot}
+snap_file <- file.path(repo_root, "metadata/run_tracking/2026-04-28_slurm_submission_chain_steps06_10.tsv")
+if (file.exists(snap_file)) {
+  read.delim(snap_file, stringsAsFactors = FALSE)
+} else {
+  data.frame(note = "Snapshot file not found at expected path")
+}
+```
+
+# End-to-End Run Order (Manuscript Resource)
+
+```{bash, eval=FALSE}
+cd /home/jyanglab/subhash/sorghum-variant-calling-resource/scripts/manuscript_resource
+bash 01_prepare_hcc_directories.sh
+bash 02_build_manifests.sh
+bash 03_step01_cram_to_fastq_submit.sh
+bash 04_step02_fastp_submit.sh
+bash 05_step03_alignment_submit.sh
+bash 06_step04_picard_submit.sh
+bash 07_step05_bqsr_haplotypecaller_submit.sh
+bash 08_step06_genomicsdb_import_submit.sh
+bash 09_step07_genotype_gvcfs_submit.sh
+bash 10_step08_gather_raw_vcf_submit.sh
+bash 11_step09_filter_snps_submit.sh
+bash 12_step10_filter_indels_submit.sh
+```

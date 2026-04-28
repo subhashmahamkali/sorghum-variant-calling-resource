@@ -1,0 +1,87 @@
+---
+title: "00 Execution Runbook (HCC)"
+author: "subhash"
+date: "2026-04-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Purpose
+
+This runbook is an operations-focused companion to the overall resource
+notebook. It provides clean command blocks for running the full manuscript
+pipeline on HCC.
+
+# Preconditions
+
+- Repository cloned on HCC at `/home/jyanglab/subhash/sorghum-variant-calling-resource`
+- Slurm available (`sbatch`)
+- Required module stacks available (`samtools`, `fastp`, `bwa-mem2`, `picard`, `gatk4`)
+- `final_922_samples.txt` present in `metadata/curated/`
+
+# 1) Initialize Resource Structure
+
+```{bash, eval=FALSE}
+cd /home/jyanglab/subhash/sorghum-variant-calling-resource/scripts/manuscript_resource
+bash 01_prepare_hcc_directories.sh
+bash 02_build_manifests.sh
+```
+
+# 2) Submit Pipeline Steps
+
+## Step 01 to Step 04 (sample-level preprocessing)
+
+```{bash, eval=FALSE}
+bash 03_step01_cram_to_fastq_submit.sh
+bash 04_step02_fastp_submit.sh
+bash 05_step03_alignment_submit.sh
+bash 06_step04_picard_submit.sh
+```
+
+## Step 05 to Step 10 (joint variant calling and filtering)
+
+```{bash, eval=FALSE}
+bash 07_step05_bqsr_haplotypecaller_submit.sh
+bash 08_step06_genomicsdb_import_submit.sh
+bash 09_step07_genotype_gvcfs_submit.sh
+bash 10_step08_gather_raw_vcf_submit.sh
+bash 11_step09_filter_snps_submit.sh
+bash 12_step10_filter_indels_submit.sh
+```
+
+# 3) Monitor Submitted Jobs
+
+```{bash, eval=FALSE}
+squeue -u "$USER"
+
+# Replace with actual job IDs from your submission chain
+sacct -j 14996681,14996682,14996683,14996684,14996685 --format=JobID,JobName,State,ExitCode,Elapsed
+```
+
+# 4) Check Required Artifacts
+
+```{bash, eval=FALSE}
+# Step 08 output required by Steps 09 and 10
+ls -lh /work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/RAW_vcf/RAW_SAP_BQSR.vcf.gz
+
+# Final outputs
+ls -lh /work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/final_vcf/results/SAP_BQSR_filtered_snps.vcf.gz
+ls -lh /work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/final_vcf/results/SAP_BQSR_filtered_indels.vcf.gz
+```
+
+# 5) Cohort/Manifest Integrity Checks
+
+```{bash, eval=FALSE}
+wc -l /work/jyanglab/subhash/BQSR/samples.tsv
+wc -l /work/jyanglab/subhash/6.genomicsdb_5mb/sample_maps/gdb_sample_map_922.tsv
+wc -l /work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/scripts/genotype_5mb_manifest.tsv
+wc -l /work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/scripts/vcf_list_manifest_order.txt
+```
+
+# Notes
+
+- Keep all large outputs on HCC storage (`/work/...`).
+- Keep only metadata, scripts, and workflow docs in this Git repository.

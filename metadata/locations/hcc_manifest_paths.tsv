@@ -1,0 +1,9 @@
+manifest	path	expected_rows	observed_rows_2026_04_28	notes
+bqsr_samples_manifest	/work/jyanglab/subhash/BQSR/samples.tsv	876	876	Input manifest for Step 05 BQSR+HaplotypeCaller array.
+gdb_sample_map_922	/work/jyanglab/subhash/6.genomicsdb_5mb/sample_maps/gdb_sample_map_922.tsv	922	922	Sample map used by GenomicsDBImport.
+intervals_5mb	/work/jyanglab/subhash/6.genomicsdb_5mb/intervals/intervals_5mb.list	149	149	Interval list for sharded GenomicsDBImport/GenotypeGVCFs.
+genotype_5mb_manifest	/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/scripts/genotype_5mb_manifest.tsv	149	149	Per-interval GenotypeGVCFs manifest.
+vcf_list_manifest_order	/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/scripts/vcf_list_manifest_order.txt	149	149	Ordered interval VCF list for GatherVcfs.
+raw_joint_vcf	/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/RAW_vcf/RAW_SAP_BQSR.vcf.gz	1	PENDING	Produced by Step 08; required by Steps 09-10.
+final_filtered_snps	/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/final_vcf/results/SAP_BQSR_filtered_snps.vcf.gz	1	PENDING	Produced by Step 09 after raw joint VCF exists.
+final_filtered_indels	/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/final_vcf/results/SAP_BQSR_filtered_indels.vcf.gz	1	PENDING	Produced by Step 10 after raw joint VCF exists.

@@ -1,0 +1,12 @@
+stage	artifact	path_template	cohort	primary_id_source
+01_cram_to_fastq	per_sample_fastq_dir	/work/jyanglab/subhash/NEW/1.fastq/{sample}/	922	metadata/curated/final_922_samples.txt
+02_fastp_trim	per_sample_trimmed_fastq	/work/jyanglab/subhash/NEW/1.fastq/trim/{sample}_fastp.fq.gz	derived_from_available_unpaired_fastq	work/jyanglab/subhash/NEW/1.fastq/trim/unpaired_fastq.list
+03_bwa_mem2_alignment	per_sample_sorted_bam	/work/jyanglab/subhash/NEW/2.alignment/{sample}/{sample}.srt.bam	alignment_list	/work/jyanglab/subhash/NEW/2.alignment/alignment_samples.list
+04_picard_markduplicates	per_sample_dedup_bam	/work/jyanglab/subhash/NEW/picard/{sample}/{sample}_picard_dedup.bam	alignment_list	/work/jyanglab/subhash/NEW/2.alignment/alignment_samples.list
+05_bqsr_haplotypecaller	per_sample_bqsr_bam	/work/jyanglab/subhash/BQSR/bam/{sample}.BQSR.bam	876_manifest	/work/jyanglab/subhash/BQSR/samples.tsv
+05_bqsr_haplotypecaller	per_sample_gvcf	/work/jyanglab/subhash/BQSR/gvcf/{sample}.g.vcf.gz	922_sample_map	/work/jyanglab/subhash/6.genomicsdb_5mb/sample_maps/gdb_sample_map_922.tsv
+06_genomicsdb_import	per_interval_workspace	/work/jyanglab/subhash/6.genomicsdb_5mb/workspaces/{interval_label}/	149_intervals	/work/jyanglab/subhash/6.genomicsdb_5mb/intervals/intervals_5mb.list
+07_genotype_gvcfs	per_interval_vcf	/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/vcfs/{interval_label}.vcf.gz	149_intervals	/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/scripts/genotype_5mb_manifest.tsv
+08_gather_raw_vcf	raw_joint_vcf	/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/RAW_vcf/RAW_SAP_BQSR.vcf.gz	1	/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/scripts/vcf_list_manifest_order.txt
+09_filter_snps	final_snp_vcf	/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/final_vcf/results/SAP_BQSR_filtered_snps.vcf.gz	1	RAW_SAP_BQSR.vcf.gz
+10_filter_indels	final_indel_vcf	/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/final_vcf/results/SAP_BQSR_filtered_indels.vcf.gz	1	RAW_SAP_BQSR.vcf.gz
