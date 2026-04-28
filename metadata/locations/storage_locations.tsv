@@ -1,0 +1,14 @@
+stage	artifact	location	tracked_in_git	notes
+00_inputs	raw_cram_root	/mnt/nrdstor/jyanglab/subhash/sorghum_WGS_JS	NO	Primary CRAM storage root (not committed).
+00_inputs	reference_fasta	/work/jyanglab/subhash/variant_calling/2.refrence/Phytozome/PhytozomeV13/Sbicolor/v5.1/assembly/sorghum_v5.1.fa	NO	Reference FASTA used across pipeline.
+00_inputs	known_sites_vcf	/work/jyanglab/subhash/known_sites/known_sites_merged.num.renamed.vcf.gz	NO	Known sites for BQSR.
+01_cram_to_fastq	fastq_root	/work/jyanglab/subhash/NEW/1.fastq	NO	FASTQ outputs and stage logs.
+02_fastp_trim	trimmed_fastq_root	/work/jyanglab/subhash/NEW/1.fastq/trim	NO	fastp outputs and reports.
+03_bwa_mem2_alignment	alignment_root	/work/jyanglab/subhash/NEW/2.alignment	NO	Sorted BAM outputs by sample.
+04_picard_markduplicates	picard_root	/work/jyanglab/subhash/NEW/picard	NO	Deduplicated BAMs and metrics.
+05_bqsr_haplotypecaller	bqsr_root	/work/jyanglab/subhash/BQSR	NO	BQSR tables, recalibrated BAMs, gVCFs.
+06_genomicsdb_import	genomicsdb_root	/work/jyanglab/subhash/6.genomicsdb_5mb	NO	Interval lists, sample maps, and workspaces.
+07_genotype_gvcfs	genotype_vcf_root	/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs	NO	Per-interval VCF outputs.
+08_gather_raw_vcf	raw_merged_vcf	/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/RAW_vcf/RAW_SAP_BQSR.vcf.gz	NO	Merged raw multi-sample VCF.
+09_filter_snps	filtered_snps_vcf	/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/final_vcf/results/SAP_BQSR_filtered_snps.vcf.gz	NO	Final SNP set.
+10_filter_indels	filtered_indels_vcf	/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/final_vcf/results/SAP_BQSR_filtered_indels.vcf.gz	NO	Final indel set.

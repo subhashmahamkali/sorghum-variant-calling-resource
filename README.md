@@ -1,10 +1,18 @@
-# Sorghum Variant Calling Pipeline
+file# Sorghum Variant Calling Pipeline
 
-This repository is organized as a clean, ordered workflow from CRAM files to
-final filtered VCF files.
+This repository documents the variant-calling workflow and metadata for a
+large sorghum WGS callset curated to a final **922** samples.
 
-Only the pipeline scripts, one R Markdown notebook per step, and curated sample
-metadata are kept here. Large data files are not stored in Git.
+Only scripts, step-level workflow notebooks, and curated metadata are kept in
+Git. Raw/intermediate sequencing files stay on HPC storage and are referenced
+by path.
+
+## Repository Scope
+
+- Pipeline code: Slurm/Bash scripts in `scripts/`
+- Step documentation: one R Markdown notebook per stage in `workflows/`
+- Sample metadata and accounting: `metadata/`
+- Storage path manifest for large files: `metadata/locations/storage_locations.tsv`
 
 ## Step Order
 
@@ -21,17 +29,64 @@ metadata are kept here. Large data files are not stored in Git.
 | 09 | `scripts/09_filter_snps/` | `workflows/09_filter_snps.Rmd` |
 | 10 | `scripts/10_filter_indels/` | `workflows/10_filter_indels.Rmd` |
 
-## Metadata
+## Sample Milestones
 
-Curated sample lists are in `metadata/curated/`.
+- `metadata/curated/haplotypecaller_971_sample_sources.tsv`: 971 source rows
+- `metadata/curated/bqsr_876_samples.txt`: 876 curated core samples
+- `metadata/curated/expvp_46_samples.txt`: 46 ExPVP/Wild additions
+- `metadata/curated/final_922_samples.txt`: final combined sample set
+- `metadata/stats/sample_accounting.tsv`: count and set-consistency checks
+- `metadata/curated/sample_transition_audit.xlsx`: detailed transition workbook
 
-- `bqsr_876_samples.txt`: canonical WGS/BQSR sample list
-- `expvp_46_samples.txt`: EX-pvp/Wild samples
-- `final_922_samples.txt`: final combined VCF sample list
-- `haplotypecaller_971_sample_sources.tsv`: HaplotypeCaller sample/source table
+## Detailed Sample Accounting
+
+### NEW run: `576 -> 571 -> 553`
+
+- Raw NEW sequencing summary has **576** entries.
+- **5 unknown** labels are excluded first, leaving **571** known NEW IDs.
+- From those 571, **18 low-read** samples are removed.
+- Final retained NEW set is **553**.
+
+Arithmetic:
+- `576 - 5 = 571`
+- `571 - 18 = 553`
+
+### SAP set: `400 -> 385 -> 323`
+
+- Initial SAP list contains **400** IDs.
+- Curation/archival/rename decisions reduce this to **385** SAP IDs.
+- Overlap between `SAP_385` and `NEW_553` is **62** (duplicates between sets).
+- Unique SAP contribution becomes **323**.
+
+Arithmetic:
+- `400 - 15 = 385`
+- `385 - 62 = 323`
+
+### Final composition
+
+- Core set: `NEW_553 + SAP_323 = 876`
+- Add ExPVP: `876 + 46 = 922`
+
+## Source Files Used for Curation
+
+External source files (not stored in this repo) used to build the accounting:
+
+- `/Users/subhashmahamkali/Downloads/pf_barcode_reads_summary_v2.csv`
+  - raw NEW run table (576 rows) with reads and median read length
+- `/Users/subhashmahamkali/Documents/variant_calling/Book1.xlsx`
+  - `NEW_571` sheet: `DirName`, `18_low_read_removal`, `553_after_removal`
+  - `SAP_400` sheet: `SM`, curated `sample` (385), and duplicate tracking
+  - `final_meta` sheet: `62_duplicates`
+
+Tracked files in this repo used for final integration:
+
+- `metadata/curated/expvp_46_samples.txt`
+- `metadata/curated/bqsr_876_samples.txt`
+- `metadata/curated/final_922_samples.txt`
+- `metadata/curated/sample_transition_audit.xlsx`
 
 ## Large Data Policy
 
 Do not commit CRAM, FASTQ, BAM, gVCF, VCF, GenomicsDB workspaces, or reference
-FASTA/index files. These remain on HPC storage and are referenced in the
-scripts and R Markdown files.
+FASTA/index files. Those files remain on HPC storage and should be tracked only
+as path references in `metadata/locations/storage_locations.tsv`.

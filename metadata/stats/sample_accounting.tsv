@@ -1,0 +1,11 @@
+metric	value	description
+haplotypecaller_rows	971	Total rows in haplotypecaller_971_sample_sources.tsv (excluding header).
+haplotypecaller_unique_samples	896	Unique sample IDs represented in HaplotypeCaller inputs.
+haplotypecaller_new_count	571	Rows sourced from NEW.
+haplotypecaller_sap_count	400	Rows sourced from SAP.
+haplotypecaller_overlap_new_sap	75	Samples present in both NEW and SAP source rows.
+bqsr_canonical_samples	876	Canonical BQSR/WGS sample list.
+expvp_samples	46	EX-pvp/Wild samples added for final set.
+final_samples	922	Final combined sample list used for downstream GenomicsDB/VCF work.
+final_equals_bqsr_plus_expvp	TRUE	Set equality check: final_922 == bqsr_876 U expvp_46.
+non_expvp_final_from_haplotypecaller	876	Final non-ExPVP samples retained from HaplotypeCaller/BQSR path.
