@@ -1,0 +1,10 @@
+item	path	description
+sample_list_final_922	metadata/curated/final_922_samples.txt	sample IDs for final cohort
+sample_list_core_876	metadata/curated/bqsr_876_samples.txt	core non-ExPVP cohort list
+sample_list_expvp_46	metadata/curated/expvp_46_samples.txt	ExPVP additions
+path_manifest_storage	metadata/locations/storage_locations.tsv	high-level storage roots and final outputs
+path_manifest_hcc	metadata/locations/hcc_manifest_paths.tsv	HCC manifest files and row checks
+path_manifest_922_expanded	metadata/locations/sample_paths_922_by_step.tsv	expanded per-sample paths across steps
+path_manifest_step_outputs	metadata/locations/step_outputs_paths.tsv	step-level outputs including RAW/final VCF
+run_snapshot_2026_04_28	metadata/run_tracking/2026-04-28_hcc_status_snapshot.tsv	captured run counts and checks
+job_chain_2026_04_28	metadata/run_tracking/2026-04-28_slurm_submission_chain_steps06_10.tsv	submitted SLURM chain and dependencies
