@@ -34,6 +34,10 @@ pipeline.
   - explicit manifest/output file paths and observed row counts on HCC
 - `sample_artifact_path_templates.tsv`
   - per-step artifact path templates for sample-level and interval-level outputs
+- `sample_paths_922_by_step.tsv`
+  - fully expanded per-sample path table (922 rows) from CRAM through GATK gVCF outputs
+- `step_outputs_paths.tsv`
+  - clean step-level path registry including RAW VCF and final SNP/indel VCF outputs
 
 ## Run Tracking (`metadata/run_tracking/`)
 

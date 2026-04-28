@@ -39,6 +39,18 @@ Path inventories:
 - `metadata/locations/storage_locations.tsv`
 - `metadata/locations/hcc_manifest_paths.tsv`
 - `metadata/locations/sample_artifact_path_templates.tsv`
+- `metadata/locations/sample_paths_922_by_step.tsv`
+- `metadata/locations/step_outputs_paths.tsv`
+
+Step-oriented organization in these files:
+
+- CRAM paths
+- FASTQ paths
+- alignment BAM/SAM-stage paths
+- Picard BAM paths
+- GATK BQSR/gVCF paths
+- RAW VCF path
+- final SNP/indel VCF paths
 
 HCC run tracking snapshots:
 

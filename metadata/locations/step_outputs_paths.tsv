@@ -1,0 +1,22 @@
+step	artifact	path	granularity	notes
+00_inputs	raw_cram_root	/mnt/nrdstor/jyanglab/subhash/sorghum_WGS_JS	global	Raw CRAM storage root.
+00_inputs	reference_fasta	/work/jyanglab/subhash/variant_calling/2.refrence/Phytozome/PhytozomeV13/Sbicolor/v5.1/assembly/sorghum_v5.1.fa	global	Reference FASTA used by GATK and CRAM decoding.
+00_inputs	known_sites_vcf	/work/jyanglab/subhash/known_sites/known_sites_merged.num.renamed.vcf.gz	global	Known sites for BQSR.
+01_cram_to_fastq	cram_list	/work/jyanglab/subhash/NEW/1.fastq/piscbt_crams.list	global	Prepared by step01 prepare script.
+01_cram_to_fastq	fastq_log_dir	/work/jyanglab/subhash/NEW/1.fastq/logs	global	Slurm and conversion logs.
+02_fastp_trim	trim_list	/work/jyanglab/subhash/NEW/1.fastq/trim/unpaired_fastq.list	global	Input list for fastp array.
+02_fastp_trim	trim_reports_dir	/work/jyanglab/subhash/NEW/1.fastq/trim/reports	global	fastp html/json outputs.
+03_bwa_mem2_alignment	alignment_sample_list	/work/jyanglab/subhash/NEW/2.alignment/alignment_samples.list	global	Array sample list for alignment and picard.
+03_bwa_mem2_alignment	alignment_logs_dir	/work/jyanglab/subhash/NEW/2.alignment/logs	global	Slurm logs for alignment.
+04_picard_markduplicates	picard_logs_dir	/work/jyanglab/subhash/NEW/picard/logs	global	Slurm logs for picard.
+05_bqsr_haplotypecaller	bqsr_manifest	/work/jyanglab/subhash/BQSR/samples.tsv	global	Sample/BAM manifest for BQSR array.
+05_bqsr_haplotypecaller	bqsr_logs_dir	/work/jyanglab/subhash/BQSR/logs	global	BQSR/HaplotypeCaller logs.
+06_genomicsdb_import	sample_map_922	/work/jyanglab/subhash/6.genomicsdb_5mb/sample_maps/gdb_sample_map_922.tsv	global	Input sample map for GenomicsDBImport.
+06_genomicsdb_import	intervals_5mb	/work/jyanglab/subhash/6.genomicsdb_5mb/intervals/intervals_5mb.list	global	149 interval shards.
+06_genomicsdb_import	workspaces_root	/work/jyanglab/subhash/6.genomicsdb_5mb/workspaces/{interval_label}/	interval	Per-interval GenomicsDB workspaces.
+07_genotype_gvcfs	genotype_manifest	/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/scripts/genotype_5mb_manifest.tsv	global	Interval/workspace/output_vcf rows.
+07_genotype_gvcfs	interval_vcfs_root	/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/vcfs/{interval_label}.vcf.gz	interval	Output per interval from GenotypeGVCFs.
+08_gather_raw_vcf	vcf_list_manifest	/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/scripts/vcf_list_manifest_order.txt	global	Ordered list of interval VCFs.
+08_gather_raw_vcf	raw_joint_vcf	/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/RAW_vcf/RAW_SAP_BQSR.vcf.gz	global	Joint raw VCF required by both filtering steps.
+09_filter_snps	final_snp_vcf	/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/final_vcf/results/SAP_BQSR_filtered_snps.vcf.gz	global	Final PASS SNP VCF.
+10_filter_indels	final_indel_vcf	/work/jyanglab/subhash/6.genomicsdb_5mb/genotype_vcfs/final_vcf/results/SAP_BQSR_filtered_indels.vcf.gz	global	Final PASS indel VCF.
