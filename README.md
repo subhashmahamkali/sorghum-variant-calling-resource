@@ -6,7 +6,7 @@ files to final filtered VCF outputs.
 This repo stores scripts, metadata, path manifests, and documentation.
 Large raw/intermediate outputs stay on HCC storage.
 
-## HCC Base Paths
+## HCC Base Path are here
 
 - Repo (HCC): `/home/jyanglab/subhash/sorghum-variant-calling-resource`
 - Raw CRAM root: `/mnt/nrdstor/jyanglab/subhash/sorghum_WGS_JS`
